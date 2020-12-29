@@ -1,4 +1,4 @@
-﻿###A to Z Store project
+### A to Z Store project
 
 Easiest usage is using Visual Studio 2019 to load the entire solution and then you can run it normally.
 This shouldn't require any special setup once it is loaded, as long as all of the prerequisites are installed.
