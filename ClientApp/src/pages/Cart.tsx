@@ -1,40 +1,48 @@
 ﻿import * as React from 'react'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
 import { Jumbotron, Col, Row, Button } from 'reactstrap'
 
 import { ApplicationState } from '../store'
-import { CartState, actionCreators as CartActionCreators } from '../store/Cart'
+import { actionCreators as CartActionCreators } from '../store/Cart'
 
 import CartItem from '../components/CartItem'
 
-type ConnectedCartProps = {
-    cart: CartState | undefined
+const mapState = (state: ApplicationState) => {
+    return { cart: state.cart }
 }
 
-type CartProps = ConnectedCartProps &
-    CartState &
-    typeof CartActionCreators &
-    RouteComponentProps<{}>
+const mapDispatch = CartActionCreators
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type CartProps = PropsFromRedux & RouteComponentProps<{}>
 
 class Cart extends React.PureComponent<CartProps> {
     private validateOrder() {
-        if (this.props.cart.cartItems.length > 0) {
-            console.log(this.props.cart)
-            this.props.submitOrder(this.props.cart)
+        const { cart } = this.props
+        if (cart) {
+            if (cart.cartItems.length > 0) {
+                console.log(this.props.cart)
+                this.props.submitOrder(cart)
+            }
         }
     }
 
     public render() {
         const { cart } = this.props
-        const { cartItems } = cart
+        let cartItems: any[] = []
+        if (cart) {
+            cartItems = cart.cartItems
+        }
 
         return (
             <React.Fragment>
                 <Jumbotron className="mt-5">
                     <Row>
                         <Col>
-                            {cartItems && cartItems.length > 0 ? (
+                            {cartItems.length > 0 ? (
                                 cartItems.map((cartItem, cartItemIndex) => {
                                     return (
                                         <div key={cartItem.product.id}>
@@ -52,7 +60,11 @@ class Cart extends React.PureComponent<CartProps> {
                         <Col xs={{ size: 2, offset: 1 }}>
                             {cartItems.length > 0 && (
                                 <>
-                                    <span>Order Total: ${cart.total.toFixed(2)}</span> <br />
+                                    <span>
+                                        Order Total: ${cart &&
+                                            cart.total.toFixed(2)}
+                                    </span>{' '}
+                                    <br />
                                     <Button
                                         color="primary"
                                         onClick={() => this.validateOrder()}
@@ -69,6 +81,4 @@ class Cart extends React.PureComponent<CartProps> {
     }
 }
 
-export default connect((state: ApplicationState) => {
-    return { cart: state.cart }
-}, CartActionCreators)(Cart)
+export default connector(Cart)

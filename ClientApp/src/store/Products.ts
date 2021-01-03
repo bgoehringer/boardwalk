@@ -18,7 +18,7 @@ type CLEAR_SEARCH = typeof CLEAR_SEARCH
 
 export interface ProductsState {
     isLoading: boolean
-    searchTerm: string
+    searchTerm: string | undefined
     products: Product[]
 }
 
@@ -79,7 +79,7 @@ export const actionCreators = {
 }
 
 // REDUCER
-const unloadedState: ProductsState = { products: [], searchTerm: null, isLoading: false }
+const unloadedState: ProductsState = { products: [], searchTerm: undefined, isLoading: false }
 
 export const reducer: Reducer<ProductsState> = (
     state: ProductsState | undefined,

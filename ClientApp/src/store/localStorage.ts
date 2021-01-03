@@ -1,4 +1,6 @@
-﻿export const loadCart = () => {
+﻿import { CartState } from './Cart'
+
+export const loadCart = () => {
     try {
         const stringifiedState = localStorage.getItem('cart')
         if (stringifiedState === null) {
@@ -10,7 +12,7 @@
     }
 }
 
-export const saveCart = (cart) => {
+export const saveCart = (cart: { cart: CartState }) => {
     try {
         const stringifiedState = JSON.stringify(cart)
         localStorage.setItem('cart', stringifiedState)

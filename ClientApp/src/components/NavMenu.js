@@ -18,6 +18,22 @@ var reactstrap_1 = require("reactstrap");
 var react_router_dom_1 = require("react-router-dom");
 var react_redux_1 = require("react-redux");
 require("./NavMenu.css");
+var mapState = function (state) {
+    var itemsInCart = 0;
+    if (state.cart && state.cart.cartItems.length) {
+        itemsInCart = state.cart.cartItems.reduce(function (prev, curr) {
+            return {
+                product: curr.product,
+                quantity: prev.quantity + curr.quantity,
+            };
+        }).quantity;
+    }
+    return {
+        itemsInCart: itemsInCart,
+    };
+};
+var mapDispatch = null;
+var connector = react_redux_1.connect(mapState, mapDispatch);
 var NavMenu = /** @class */ (function (_super) {
     __extends(NavMenu, _super);
     function NavMenu() {
@@ -40,18 +56,5 @@ var NavMenu = /** @class */ (function (_super) {
     };
     return NavMenu;
 }(React.PureComponent));
-exports.default = react_redux_1.connect(function (state) {
-    var itemsInCart = 0;
-    if (state.cart && state.cart.cartItems.length) {
-        itemsInCart = state.cart.cartItems.reduce(function (prev, curr) {
-            return {
-                product: curr.product,
-                quantity: prev.quantity + curr.quantity,
-            };
-        }).quantity;
-    }
-    return {
-        itemsInCart: itemsInCart,
-    };
-})(NavMenu);
+exports.default = connector(NavMenu);
 //# sourceMappingURL=NavMenu.js.map

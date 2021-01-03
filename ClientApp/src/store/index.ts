@@ -3,8 +3,8 @@ import * as Products from './Products'
 
 // The top-level state object
 export interface ApplicationState {
-    cart: Cart.CartState | undefined
-    products: Products.ProductsState | undefined
+    cart: Cart.CartState
+    products: Products.ProductsState
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using

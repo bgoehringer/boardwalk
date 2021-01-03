@@ -1,19 +1,20 @@
 ﻿import * as React from 'react'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
 import { ApplicationState } from '../store'
-import {
-    ProductsState as ProductsStateType,
-    actionCreators as ProductsActions,
-} from '../store/Products'
+import { actionCreators } from '../store/Products'
 
 import { Row, Col } from 'reactstrap'
 import Product from '../components/Product'
 import SearchBar from '../components/SearchBar'
 
-type ProductsProps = ProductsStateType &
-    typeof ProductsActions &
-    RouteComponentProps<{}>
+const mapState = (state: ApplicationState) => state.products
+const mapDispatch = actionCreators
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type ProductsProps = PropsFromRedux & RouteComponentProps<{}>
 
 type ProductsState = {
     searchTerm: string
@@ -21,7 +22,7 @@ type ProductsState = {
 
 class Products extends React.PureComponent<ProductsProps, ProductsState> {
     state = {
-        searchTerm: ''
+        searchTerm: '',
     }
 
     public componentDidMount() {
@@ -34,7 +35,7 @@ class Products extends React.PureComponent<ProductsProps, ProductsState> {
 
     submitSearch() {
         const { searchTerm } = this.state
-        this.props.requestProducts(searchTerm);
+        this.props.requestProducts(searchTerm)
     }
 
     public render() {
@@ -44,23 +45,29 @@ class Products extends React.PureComponent<ProductsProps, ProductsState> {
                 {!this.props.isLoading && (
                     <>
                         <Row>
-                            <SearchBar searchTerm={this.props.searchTerm} updateSearchTerm={(searchTerm) => this.updateSearchTerm(searchTerm)} submitSearch={() => this.submitSearch()} />
+                            <SearchBar
+                                searchTerm={this.props.searchTerm}
+                                updateSearchTerm={searchTerm =>
+                                    this.updateSearchTerm(searchTerm)
+                                }
+                                submitSearch={() => this.submitSearch()}
+                            />
                         </Row>
                         <Row>
-                        {this.props.products &&
-                            this.props.products.map(product => {
-                                return (
-                                    <Col
-                                        key={product.id}
-                                        lg="4"
-                                        md="6"
-                                        sm="12"
-                                        className="mt-3"
-                                    >
-                                        <Product product={product} />
-                                    </Col>
-                                )
-                            })}
+                            {this.props.products &&
+                                this.props.products.map(product => {
+                                    return (
+                                        <Col
+                                            key={product.id}
+                                            lg="4"
+                                            md="6"
+                                            sm="12"
+                                            className="mt-3"
+                                        >
+                                            <Product product={product} />
+                                        </Col>
+                                    )
+                                })}
                         </Row>
                     </>
                 )}
@@ -75,7 +82,4 @@ class Products extends React.PureComponent<ProductsProps, ProductsState> {
     }
 }
 
-export default connect(
-    (state: ApplicationState) => state.products,
-    ProductsActions
-)(Products)
+export default connector(Products)

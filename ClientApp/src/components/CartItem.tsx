@@ -1,5 +1,5 @@
 ﻿import * as React from 'react'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 
 import {
     CartItem as CartItemType,
@@ -21,7 +21,14 @@ type BaseCartItemProps = {
     cartItemIndex: number
 }
 
-type CartItemProps = BaseCartItemProps & typeof CartActionCreators
+const mapState = null
+const mapDispatch = CartActionCreators
+
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type CartItemProps = BaseCartItemProps & PropsFromRedux
 
 class CartItem extends React.PureComponent<CartItemProps> {
     private adjustQuantity(quantity: number, storeItemIndex: number) {
@@ -99,7 +106,9 @@ class CartItem extends React.PureComponent<CartItemProps> {
                                         />
                                     </InputGroup>
                                 </Col>
-                                <Col xs={{size: 3, offset: 5}}>Item Total: ${subTotal.toFixed(2)}</Col>
+                                <Col xs={{ size: 3, offset: 5 }}>
+                                    Item Total: ${subTotal.toFixed(2)}
+                                </Col>
                             </Row>
                         </Col>
                     </Row>
@@ -109,4 +118,4 @@ class CartItem extends React.PureComponent<CartItemProps> {
     }
 }
 
-export default connect(null, CartActionCreators)(CartItem)
+export default connector(CartItem)

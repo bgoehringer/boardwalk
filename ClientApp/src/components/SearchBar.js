@@ -53,6 +53,9 @@ var React = require("react");
 var react_redux_1 = require("react-redux");
 var reactstrap_1 = require("reactstrap");
 var Products_1 = require("../store/Products");
+var mapState = null;
+var mapDispatch = Products_1.actionCreators;
+var connector = react_redux_1.connect(mapState, mapDispatch);
 var SearchBar = /** @class */ (function (_super) {
     __extends(SearchBar, _super);
     function SearchBar() {
@@ -64,7 +67,7 @@ var SearchBar = /** @class */ (function (_super) {
             React.createElement(reactstrap_1.Col, { xs: "4" },
                 React.createElement(reactstrap_1.InputGroup, null,
                     React.createElement(reactstrap_1.InputGroupAddon, { addonType: "prepend" }, "Search Items:"),
-                    React.createElement(reactstrap_1.Input, { type: "text", defaultValue: this.props.searchTerm, onInput: function (event) {
+                    React.createElement(reactstrap_1.Input, { type: "text", defaultValue: this.props.searchTerm ? this.props.searchTerm : '', onInput: function (event) {
                             return _this.props.updateSearchTerm(event.currentTarget.value);
                         } }))),
             React.createElement(reactstrap_1.Col, { xs: "1" },
@@ -84,5 +87,5 @@ var SearchBar = /** @class */ (function (_super) {
     };
     return SearchBar;
 }(React.PureComponent));
-exports.default = react_redux_1.connect(null, Products_1.actionCreators)(SearchBar);
+exports.default = connector(SearchBar);
 //# sourceMappingURL=SearchBar.js.map

@@ -55,12 +55,15 @@ var Products_1 = require("../store/Products");
 var reactstrap_1 = require("reactstrap");
 var Product_1 = require("../components/Product");
 var SearchBar_1 = require("../components/SearchBar");
+var mapState = function (state) { return state.products; };
+var mapDispatch = Products_1.actionCreators;
+var connector = react_redux_1.connect(mapState, mapDispatch);
 var Products = /** @class */ (function (_super) {
     __extends(Products, _super);
     function Products() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
-            searchTerm: ''
+            searchTerm: '',
         };
         return _this;
     }
@@ -89,7 +92,9 @@ var Products = /** @class */ (function (_super) {
             this.props.isLoading && React.createElement("span", null, "Loading..."),
             !this.props.isLoading && (React.createElement(React.Fragment, null,
                 React.createElement(reactstrap_1.Row, null,
-                    React.createElement(SearchBar_1.default, { searchTerm: this.props.searchTerm, updateSearchTerm: function (searchTerm) { return _this.updateSearchTerm(searchTerm); }, submitSearch: function () { return _this.submitSearch(); } })),
+                    React.createElement(SearchBar_1.default, { searchTerm: this.props.searchTerm, updateSearchTerm: function (searchTerm) {
+                            return _this.updateSearchTerm(searchTerm);
+                        }, submitSearch: function () { return _this.submitSearch(); } })),
                 React.createElement(reactstrap_1.Row, null, this.props.products &&
                     this.props.products.map(function (product) {
                         return (React.createElement(reactstrap_1.Col, { key: product.id, lg: "4", md: "6", sm: "12", className: "mt-3" },
@@ -103,5 +108,5 @@ var Products = /** @class */ (function (_super) {
     };
     return Products;
 }(React.PureComponent));
-exports.default = react_redux_1.connect(function (state) { return state.products; }, Products_1.actionCreators)(Products);
+exports.default = connector(Products);
 //# sourceMappingURL=Store.js.map

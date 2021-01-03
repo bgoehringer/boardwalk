@@ -29,6 +29,14 @@ var React = require("react");
 var react_redux_1 = require("react-redux");
 var Cart_1 = require("../store/Cart");
 var reactstrap_1 = require("reactstrap");
+var mapState = function (state, ownProps) {
+    return {
+        cart: state.cart,
+        product: ownProps.product,
+    };
+};
+var mapDispatch = Cart_1.actionCreators;
+var connector = react_redux_1.connect(mapState, mapDispatch);
 var Product = /** @class */ (function (_super) {
     __extends(Product, _super);
     function Product() {
@@ -98,10 +106,5 @@ var Product = /** @class */ (function (_super) {
     return Product;
 }(React.PureComponent));
 exports.Product = Product;
-exports.default = react_redux_1.connect(function (state, ownProps) {
-    return {
-        cart: state.cart,
-        product: ownProps.product,
-    };
-}, Cart_1.actionCreators)(Product);
+exports.default = connector(Product);
 //# sourceMappingURL=Product.js.map

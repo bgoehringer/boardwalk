@@ -43,7 +43,7 @@ exports.actionCreators = {
     clearSearch: function () { return ({ type: CLEAR_SEARCH }); }
 };
 // REDUCER
-var unloadedState = { products: [], searchTerm: null, isLoading: false };
+var unloadedState = { products: [], searchTerm: undefined, isLoading: false };
 var reducer = function (state, incomingAction) {
     if (state === undefined) {
         return unloadedState;

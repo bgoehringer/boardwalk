@@ -17,6 +17,9 @@ var React = require("react");
 var react_redux_1 = require("react-redux");
 var Cart_1 = require("../store/Cart");
 var reactstrap_1 = require("reactstrap");
+var mapState = null;
+var mapDispatch = Cart_1.actionCreators;
+var connector = react_redux_1.connect(mapState, mapDispatch);
 var CartItem = /** @class */ (function (_super) {
     __extends(CartItem, _super);
     function CartItem() {
@@ -64,5 +67,5 @@ var CartItem = /** @class */ (function (_super) {
     };
     return CartItem;
 }(React.PureComponent));
-exports.default = react_redux_1.connect(null, Cart_1.actionCreators)(CartItem);
+exports.default = connector(CartItem);
 //# sourceMappingURL=CartItem.js.map

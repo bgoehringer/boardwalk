@@ -9,16 +9,33 @@ import {
     Button,
 } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import { ApplicationState } from '../store'
 
 import './NavMenu.css'
 
-type ConnectedNavMenuProps = {
-    itemsInCart: number
+const mapState = (state: ApplicationState) => {
+    let itemsInCart = 0
+    if (state.cart && state.cart.cartItems.length) {
+        itemsInCart = state.cart.cartItems.reduce((prev, curr) => {
+            return {
+                product: curr.product,
+                quantity: prev.quantity + curr.quantity,
+            }
+        }).quantity
+    }
+    return {
+        itemsInCart,
+    }
 }
 
-type NavMenuProps = ConnectedNavMenuProps
+const mapDispatch = null
+
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type NavMenuProps = PropsFromRedux
 
 class NavMenu extends React.PureComponent<NavMenuProps> {
     public render() {
@@ -30,7 +47,6 @@ class NavMenu extends React.PureComponent<NavMenuProps> {
                     className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3"
                     light
                 >
-
                     <Container>
                         <div className="w-25">
                             <NavbarBrand tag={Link} to="/">
@@ -63,17 +79,4 @@ class NavMenu extends React.PureComponent<NavMenuProps> {
     }
 }
 
-export default connect((state: ApplicationState): ConnectedNavMenuProps => {
-    let itemsInCart = 0
-    if (state.cart && state.cart.cartItems.length) {
-        itemsInCart = state.cart.cartItems.reduce((prev, curr) => {
-            return {
-                product: curr.product,
-                quantity: prev.quantity + curr.quantity,
-            }
-        }).quantity
-    }
-    return {
-        itemsInCart,
-    }
-})(NavMenu)
+export default connector(NavMenu)

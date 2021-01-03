@@ -1,13 +1,19 @@
 ﻿import * as React from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { connect, ConnectedProps } from 'react-redux'
 
 import { Col, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap'
 
-import { actionCreators as ProductsActions } from '../store/Products'
+import { actionCreators } from '../store/Products'
 
-type SearchBarProps = typeof ProductsActions & {
-    searchTerm: string
+const mapState = null
+const mapDispatch = actionCreators
+
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type SearchBarProps = PropsFromRedux & {
+    searchTerm: string | undefined
     updateSearchTerm: (newString: string) => void
     submitSearch: () => void
 }
@@ -23,7 +29,7 @@ class SearchBar extends React.PureComponent<SearchBarProps> {
                         </InputGroupAddon>
                         <Input
                             type="text"
-                            defaultValue={this.props.searchTerm}
+                            defaultValue={this.props.searchTerm ? this.props.searchTerm : ''}
                             onInput={event =>
                                 this.props.updateSearchTerm(
                                     event.currentTarget.value
@@ -56,4 +62,4 @@ class SearchBar extends React.PureComponent<SearchBarProps> {
     }
 }
 
-export default connect(null, ProductsActions)(SearchBar)
+export default connector(SearchBar)

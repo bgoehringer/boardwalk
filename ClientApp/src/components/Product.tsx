@@ -1,7 +1,7 @@
 ﻿import * as React from 'react'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import { ApplicationState } from '../store'
-import { CartState, actionCreators as CartActionCreators } from '../store/Cart'
+import { actionCreators } from '../store/Cart'
 import { Product as ProductType } from '../store/Products'
 
 import {
@@ -24,11 +24,20 @@ type BaseProductProps = {
     product: ProductType
 }
 
-type ConnectedProductProps = {
-    cart: CartState | undefined
-} & BaseProductProps
+const mapState = (state: ApplicationState, ownProps: BaseProductProps) => {
+    return {
+        cart: state.cart,
+        product: ownProps.product,
+    }
+}
 
-type ProductProps = ConnectedProductProps & typeof CartActionCreators
+const mapDispatch = actionCreators
+
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type ProductProps = PropsFromRedux
 
 type ProductState = {
     quantity: number
@@ -148,12 +157,4 @@ export class Product extends React.PureComponent<ProductProps, ProductState> {
     }
 }
 
-export default connect(
-    (state: ApplicationState, ownProps: BaseProductProps) => {
-        return {
-            cart: state.cart,
-            product: ownProps.product,
-        }
-    },
-    CartActionCreators
-)(Product)
+export default connector(Product)
